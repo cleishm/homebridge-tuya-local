@@ -203,7 +203,7 @@ class TuyaLan {
                     if (!characteristic.props ||
                         !Array.isArray(characteristic.props.perms) ||
                         characteristic.props.perms.length !== 3 ||
-                        !(characteristic.props.perms.includes(api.hap.Perms.PAIRED_WRITE) && characteristic.props.perms.includes(api.hap.Perms.NOTIFY))
+                        !(characteristic.props.perms.includes(this.api.hap.Perms.PAIRED_WRITE) && characteristic.props.perms.includes(this.api.hap.Perms.NOTIFY))
                     ) return;
 
                     this.log.info('Marked %s unreachable by faulting Service.%s.%s', accessory.displayName, service.displayName, characteristic.displayName);
