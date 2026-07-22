@@ -52,12 +52,12 @@ const CLASS_DEF = {
     oildiffuser: OilDiffuserAccessory
 };
 
-let Characteristic, PlatformAccessory, Service, Categories, AdaptiveLightingController, UUID;
+let Characteristic, PlatformAccessory, Service, Categories, AdaptiveLightingController, UUID, Perms;
 
 module.exports = function(homebridge) {
     ({
         platformAccessory: PlatformAccessory,
-        hap: {Characteristic, Service, AdaptiveLightingController, Accessory: {Categories}, uuid: UUID}
+        hap: {Characteristic, Service, AdaptiveLightingController, Categories, Perms, uuid: UUID}
     } = homebridge);
 
     homebridge.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, TuyaLan, true);
@@ -68,7 +68,7 @@ class TuyaLan {
         [this.log, this.config, this.api] = [...props];
 
         this.cachedAccessories = new Map();
-        this.api.hap.EnergyCharacteristics = require('./lib/EnergyCharacteristics')(this.api.hap.Characteristic);
+        this.api.hap.EnergyCharacteristics = require('./lib/EnergyCharacteristics')(this.api.hap.Characteristic, this.api.hap.Perms);
 
         if(!this.config || !this.config.devices) {
             this.log("No devices found. Check that you have specified them in your config.json file.");
@@ -203,7 +203,7 @@ class TuyaLan {
                     if (!characteristic.props ||
                         !Array.isArray(characteristic.props.perms) ||
                         characteristic.props.perms.length !== 3 ||
-                        !(characteristic.props.perms.includes(Characteristic.Perms.WRITE) && characteristic.props.perms.includes(Characteristic.Perms.NOTIFY))
+                        !(characteristic.props.perms.includes(Perms.PAIRED_WRITE) && characteristic.props.perms.includes(Perms.EVENTS))
                     ) return;
 
                     this.log.info('Marked %s unreachable by faulting Service.%s.%s', accessory.displayName, service.displayName, characteristic.displayName);
