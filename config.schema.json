@@ -306,6 +306,15 @@
                   "functionBody": "return model.devices && model.devices[arrayIndices] && ['TWLight','RGBTWLight','RGBTWOutlet'].includes(model.devices[arrayIndices].type);"
                 }
               },
+              "reassertPowerInterval": {
+                "type": "integer",
+                "minimum": 0,
+                "placeholder": "0",
+                "description": "Seconds between re-sends of the device's own reported power state, for devices that sometimes acknowledge a power change without acting on it. 0 or empty disables it.",
+                "condition": {
+                  "functionBody": "return model.devices && model.devices[arrayIndices] && ['SimpleLight','SimpleDimmer'].includes(model.devices[arrayIndices].type);"
+                }
+              },
               "outletCount": {
                 "type": "integer",
                 "placeholder": "5",
